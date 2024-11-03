@@ -1,0 +1,47 @@
+[
+    {
+        "file_name": "[SubsPlease] Dandadan - 05 (1080p) [28020A6E].mkv",
+        "file_extension": "mkv",
+        "video_resolution": "1080p",
+        "file_checksum": "28020A6E",
+        "episode_number": "05",
+        "anime_title": "Dandadan",
+        "release_group": "SubsPlease"
+    },
+    {
+        "file_name": "[SubsPlease] Dandadan - 04 (1080p) [3D2CC7CF].mkv",
+        "file_extension": "mkv",
+        "video_resolution": "1080p",
+        "file_checksum": "3D2CC7CF",
+        "episode_number": "04",
+        "anime_title": "Dandadan",
+        "release_group": "SubsPlease"
+    },
+    {
+        "file_name": "[SubsPlease] Dandadan - 03 (1080p) [569BAA9C].mkv",
+        "file_extension": "mkv",
+        "video_resolution": "1080p",
+        "file_checksum": "569BAA9C",
+        "episode_number": "03",
+        "anime_title": "Dandadan",
+        "release_group": "SubsPlease"
+    },
+    {
+        "file_name": "[SubsPlease] Dandadan - 02 (1080p) [5F956413].mkv",
+        "file_extension": "mkv",
+        "video_resolution": "1080p",
+        "file_checksum": "5F956413",
+        "episode_number": "02",
+        "anime_title": "Dandadan",
+        "release_group": "SubsPlease"
+    },
+    {
+        "file_name": "[SubsPlease] Dandadan - 01 (1080p) [2AB10B14].mkv",
+        "file_extension": "mkv",
+        "video_resolution": "1080p",
+        "file_checksum": "2AB10B14",
+        "episode_number": "01",
+        "anime_title": "Dandadan",
+        "release_group": "SubsPlease"
+    }
+]
