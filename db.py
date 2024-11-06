@@ -1,12 +1,10 @@
 import sqlite3
 
-# Conectar ao banco de dados (ou criar um se não existir)
+# Added unknown day 4 of november 2024
+# status: working great.
+# description: Connect to a database, or created if not exist.
 conn = sqlite3.connect('animes.db')
-
-# Criar um cursor
 cursor = conn.cursor()
-
-# Criar a tabela
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS animes (
     id INTEGER PRIMARY KEY,
@@ -15,9 +13,12 @@ CREATE TABLE IF NOT EXISTS animes (
 )
 ''')
 
+# Added unknown day 4 of november 2024
+# status: working great.
+# description: create new entry in the database only if there is not the same one already.
+#              Tries to avoid duplication.
 def new_db_entry(nome, informacoes):
-    # Função para adicionar um episódio de anime à base de dados
-    # Verificando se a entrada já existe
+    present_in_database = 0
     cursor.execute('''
     SELECT * FROM animes WHERE nome = ? AND informacoes = ?
     ''', (nome, informacoes))
@@ -30,23 +31,40 @@ def new_db_entry(nome, informacoes):
         print(f"INFO: Successfully added anime '{nome}' episode '{informacoes}' to the database.")
     else:
         print(f"INFO: The episode '{informacoes}' of '{nome}' is already present on the database.")
-
-
+        present_in_database = 1 
+    return 1, present_in_database
+# Added unknown day 4 of november 2024
+# status: working great.
+# description: query all anime names from database. Returns all items in a list of tuples.
 def qry_db_everything():
-    # Funcao que retorna todos os items da database em um dicionario
     cursor.execute('SELECT * FROM animes')
-    return cursor.fetchall() # retorna em lista de tuplas
+    return cursor.fetchall() 
 
+# Added unknown day 4 of november 2024
+# status: working great. But need to address case sensisivity problem.
+# description: search an anime info by name string. 
+#              Case sensitive currently
 def qry_db_by_name(nome):
-    # Search an anime by name (part of name)
     cursor.execute("SELECT nome, informacoes FROM animes WHERE nome LIKE ?", (f"%{nome}%",))
     return cursor.fetchall()
 
+# Added unknown day 4 of november 2024
+# status: working great.
+# description: query all anime names from database
 def qry_db_all_names():
-    # Consulta todos os nomes dos animes na db
     cursor.execute('SELECT nome FROM animes')
     return [row[0] for row in cursor.fetchall()]
 
+# Added unknown day 4 of november 2024
+# status: working great.
+# description: closes the database connection.
+def close_connection():
+    conn.close
+
+### --- NEW AND BROKEN FOLLOWING --- ###
+# Added unknown day 4 of november 2024
+# status: don't know if it is working probably not
+# description: searches for animes by quering the string name
 def get_latest_episode(nome):
     cursor.execute('SELECT informacoes FROM animes WHERE nome = ?', (nome,))
     episodes = cursor.fetchall()
@@ -60,8 +78,17 @@ def get_latest_episode(nome):
 
     return latest_episode_number if latest_episode_number != -1 else None  # Return the latest episode number or None
 
-
-def close_connection():
-    conn.close
-
-
+# Added 20:21 day 5 of november 2024
+# status: very little tested but working
+# description: This function excludes anime from name. 
+#              Case insensitive string anime name and also all related 
+def delete_anime(nome):
+    cursor.execute('''
+    DELETE FROM animes WHERE nome LIKE ? COLLATE NOCASE 
+    ''', (f"%{nome}%",))  # Search for the base anime name (case-insensitive) and delete all matching entries 
+                          # Allowing partial matching (e.g., 'One Piece')
+    conn.commit()
+    if cursor.rowcount > 0:
+        print(f"INFO: Anime '{nome}' and all related entries successfully deleted.")
+    else:
+        print(f"INFO: No anime found with the name '{nome}' to delete.")
