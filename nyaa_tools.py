@@ -2,6 +2,8 @@ from nyaapy.nyaasi.nyaa import Nyaa
 import anitopy
 import db
 import logging
+from yaspin import yaspin
+
 
 
 DEBUG_MODE = True
@@ -27,7 +29,7 @@ def nyaasearch(usr_qry_anime_search, usr_qry_release_group = "[SubsPlease]", usr
 # description: This function parses the torrent release name and returns anime title and episode number
 def anitopy_parse(torrent_filename, anitopy_options = {'allowed_delimiters': ' '}):
     parsed_data = anitopy.parse(torrent_filename.name, anitopy_options)
-    return parsed_data.get('episode_number'), parsed_data.get('anime_title')
+    return parsed_data.get('anime_title'), parsed_data.get('episode_number')
 
 # Added 20:41 day 5 of november 2024
 # status: Working great.
@@ -44,7 +46,7 @@ def refresh_nyaa(usr_qry_anime_search, usr_qry_release_group, usr_qry_resolution
             anime_title, episode_number = anitopy_parse(torrent_filename)
             if anime_title is not None and episode_number is not None:
                 # this db.new_db_entry fn returns 1 if added title
-                new_added_to_db, new_present_in_db = db.new_db_entry(anime_title, episode_number)
+                new_added_to_db, new_present_in_db = db.new_db_entry(nome=anime_title, informacoes=episode_number)
                 added_to_db += new_added_to_db
                 present_in_db += new_present_in_db
                 # following print just for DEBUG MODE
@@ -62,7 +64,7 @@ def refresh_nyaa(usr_qry_anime_search, usr_qry_release_group, usr_qry_resolution
 
     return added_to_db, refreshed_count, present_in_db
 
-
+@yaspin(text="Fetching anime list...")
 def get_nyaa_updates(usr_qry_anime_search, usr_qry_release_group, usr_qry_resolution = "1080p", category = "1", filter = "2", alt_release_grp = "EMBER"):
 
     # Helper function to log success/failure based on the results
@@ -90,18 +92,25 @@ def get_nyaa_updates(usr_qry_anime_search, usr_qry_release_group, usr_qry_resolu
 
 def main():
 
-    anime_escolhido = "asiofasdn"
-    grupo_torrent_escolhido = "[SubsPlease]"
-    grupo_release_alternativo = "[EMBER]"
+    anime_escolhido = "ranma"
+    grupo_torrent_escolhido = "SubsPlease"
+    grupo_release_alternativo = "EMBER"
 
     # Refresh titles in database
-    get_nyaa_updates(anime_escolhido, grupo_torrent_escolhido, alt_release_grp=grupo_release_alternativo)
+    get_nyaa_updates(usr_qry_anime_search=anime_escolhido, usr_qry_release_group=grupo_torrent_escolhido, usr_qry_resolution=grupo_release_alternativo)
+
+
 
     # Delete anime function
     #db.delete_anime(anime_escolhido)
+    all_data = db.qry_db_everything()
+    print(all_data)
 
+    #db.delete_anime("Dandadan")
     # Close Database
     db.close_connection()
+
+
 
 if __name__ == "__main__":
     main()

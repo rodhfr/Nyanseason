@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS animes (
 # status: working great.
 # description: create new entry in the database only if there is not the same one already.
 #              Tries to avoid duplication.
-def new_db_entry(nome, informacoes):
+def new_db_entry(informacoes, nome):
     present_in_database = 0
     cursor.execute('''
     SELECT * FROM animes WHERE nome = ? AND informacoes = ?
